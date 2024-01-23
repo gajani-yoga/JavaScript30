@@ -9,6 +9,10 @@
 <body>
 
 
+  <!-- Key code unique to each key on the keyboard -->
+  <!-- Can be used across many languages -->
+
+  <!-- A data-* attribute on a <div> tag attaches additional data to the div element.   -->
   <div class="keys">
     <div data-key="65" class="key">
       <kbd>A</kbd>
@@ -59,6 +63,28 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+
+  function playSound(e) {
+    // Attribute selector --> []
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`)
+    const key = document.querySelector(`.key[data-key="${e.keyCode}"]`) // Selecting class = key
+    if(!audio) return // Stop function from running if no valid key is pressed
+    audio.currentTime = 0 // Rewind the auido file to the start
+    audio.play()
+    key.classList.add('playing')
+  }
+    
+  function removeTransition(e) {
+    if (e.propertyName !== 'transform') return  // Skip if it is not equal to transform
+    console.log(this)
+    e.target.classList.remove('playing')
+  }
+
+  // Add an event listener to see which key is being pressed
+  // Event = keydown
+  window.addEventListener('keydown', playSound)
+  const keys = document.querySelectorAll('.keys')
+  keys.forEach(key => key.addEventListener('transitionend', removeTransition))
 
 </script>
 
